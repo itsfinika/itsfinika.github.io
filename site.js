@@ -220,6 +220,7 @@
     if (!content) return;
     const contents = document.querySelector('.document-contents');
     const navigation = contents.closest('.document-nav');
+    const readingLinks = contents.querySelector('nav');
     const summary = contents.querySelector('summary');
     const currentLabel = contents.querySelector('.contents-current');
     const compact = window.matchMedia('(max-width: 800px)');
@@ -247,6 +248,22 @@
         else table.removeAttribute('tabindex');
       });
     }
+    function positionReadingIndicator(link) {
+      if (!link || !contents.open) {
+        delete readingLinks.dataset.readingIndicator;
+        return;
+      }
+      const item = link.getBoundingClientRect();
+      const list = readingLinks.getBoundingClientRect();
+      const position = {
+        x: item.left - list.left - readingLinks.clientLeft + readingLinks.scrollLeft,
+        y: item.top - list.top - readingLinks.clientTop + readingLinks.scrollTop,
+        width: item.width,
+        height: item.height
+      };
+      for (const [property, value] of Object.entries(position)) readingLinks.style.setProperty(`--reading-${property}`, `${value}px`);
+      readingLinks.dataset.readingIndicator = '';
+    }
     function updateCurrent() {
       readingScheduled = false;
       const offset = parseFloat(getComputedStyle(root).scrollPaddingTop) + 12;
@@ -259,10 +276,12 @@
           closestTop = top;
         }
       });
+      current = entries.find(entry => pageScroll && (entry.target === pageScroll.target || entry.target.contains(pageScroll.target))) || current;
       entries.forEach(entry => {
         if (entry === current) entry.link.setAttribute('aria-current', 'location');
         else entry.link.removeAttribute('aria-current');
       });
+      positionReadingIndicator(current?.link);
       const label = current?.link.textContent.trim() || '';
       currentLabel.textContent = label.match(/^TC-SP-\d+/)?.[0] || ({'Course regression inventory': 'Regression', 'Smoke test pack': 'Smoke', 'Plan setup & scope': 'Plan setup'}[label] || label);
     }
@@ -302,6 +321,7 @@
       followHash(true);
     });
     contents.addEventListener('toggle', () => {
+      scheduleReadingUpdate();
       if (compact.matches && contents.open) {
         const header = document.querySelector('.site-header[data-compact]');
         if (header) header.querySelector('details').open = false;
@@ -325,11 +345,13 @@
     // Height-only resizes must preserve the reader's open/closed contents menu.
     window.addEventListener('resize', () => { updateReadingOffset(); updateTables(); });
     window.addEventListener('scroll', scheduleReadingUpdate, { passive: true });
+    window.addEventListener('portfolio-scroll-state', scheduleReadingUpdate);
     window.addEventListener('hashchange', () => followHash(true));
     navigation.dataset.ready = '';
     updateLayout();
     if ('ResizeObserver' in window) {
       new ResizeObserver(updateReadingOffset).observe(summary);
+      new ResizeObserver(scheduleReadingUpdate).observe(readingLinks);
       new ResizeObserver(() => { updateTables(); scheduleReadingUpdate(); }).observe(content);
     }
     followHash(false);

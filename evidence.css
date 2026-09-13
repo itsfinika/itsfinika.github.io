@@ -13,14 +13,14 @@
 .document-downloads{display:flex;flex-wrap:wrap;gap:4px 26px;margin-top:12px}
 .document-download{display:inline-flex;align-items:center;gap:9px;min-height:44px;color:var(--brand);font-size:.875rem;line-height:1.5;padding-block:9px}
 .document-download>.icon{width:18px;height:18px}
-.reading-layout{padding-block:30px 60px;gap:44px;grid-template-columns:220px minmax(0,1fr)}
+.reading-layout{padding-block:30px 60px;gap:40px;grid-template-columns:clamp(220px,20vw,260px) minmax(0,1fr)}
 .document-nav{padding:0;border:0;border-radius:0;background:transparent}
 .document-contents{border:0}
 .document-contents>summary{min-height:44px;padding:0 0 12px;font-size:.9375rem;font-weight:600}
 .document-contents>summary>.icon{display:none}
 .document-contents>summary>span,.document-contents[open]>summary>span{font-size:inherit;font-weight:inherit;transform:none}
 .contents-current{display:none}
-.document-nav a[aria-current="location"]{color:var(--brand);font-weight:600;background:var(--soft);border-radius:6px}
+.document-nav a[aria-current="location"]{color:var(--brand);background:transparent}
 .case-pagination{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:18px;margin-top:24px}
 .case-pagination a{display:flex;align-items:center;gap:10px;min-height:44px;font-size:.9375rem;line-height:1.5;color:var(--brand)}
 .case-pagination small{display:block;font-size:.8125rem;color:var(--muted)}
@@ -40,9 +40,14 @@
 .document-content .inventory-empty p{font-size:.9375rem;margin:8px 0 0}
 .inventory-table td:first-child .cell-value{white-space:nowrap;font-size:.875rem;font-weight:600;color:var(--brand)}
 .inventory-table td:last-child .cell-value{display:inline-block;padding:3px 9px;border:1px solid var(--line);border-radius:5px;font-size:.8125rem;color:var(--ink);background:var(--soft)}
-.document-nav nav{gap:0}
-.document-nav a{font-size:.875rem;line-height:1.5;padding-block:10px;min-height:44px}
-.document-nav a:hover{color:var(--brand)}
+.document-nav nav{gap:2px;border:0;box-shadow:inset 1px 0 0 var(--line);position:relative;isolation:isolate}
+.document-nav nav::before{content:"";display:none;position:absolute;left:0;top:0;width:var(--reading-width,0px);height:var(--reading-height,0px);transform:translate(var(--reading-x,0px),var(--reading-y,0px));background:var(--soft);border-left:2px solid var(--brand);border-radius:0 6px 6px 0;pointer-events:none;z-index:0;transition:transform .38s cubic-bezier(.22,.61,.36,1),width .38s cubic-bezier(.22,.61,.36,1),height .38s cubic-bezier(.22,.61,.36,1)}
+.document-nav nav[data-reading-indicator]::before{display:block}
+.document-nav a{position:relative;z-index:1;font-size:.875rem;font-weight:500;line-height:1.5;padding:11px 16px;min-height:44px;min-width:0;overflow-wrap:anywhere;border-radius:0 6px 6px 0;transition:color .2s,background-color .2s}
+.document-nav a:hover{color:var(--brand);background:var(--soft);text-decoration:none}
+.document-nav a[aria-current="location"]{background:transparent}
+.document-nav nav:not([data-reading-indicator]) a[aria-current="location"]{background:var(--soft);box-shadow:inset 2px 0 0 var(--brand)}
+.document-nav a:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
 .document-content h2{scroll-margin-top:10px}
 .document-content .test-case,.document-content .finding-section,.document-content .plan-section{margin-top:30px;padding-top:28px;border-top:1px solid var(--line)}
 .document-content .test-case>h2,.document-content .finding-section>h2,.document-content .plan-section>h2{margin-top:0}
@@ -68,11 +73,12 @@
 .reading-footer a{min-height:44px}
 .reading-footer .back-link{margin-bottom:0}
 .document-content .table-scroll:focus-visible{outline:2px solid var(--brand);outline-offset:4px}
-@media(max-width:1100px){.reading-layout{grid-template-columns:185px minmax(0,1fr);gap:30px}}
+@media(max-width:1100px){.reading-layout{grid-template-columns:220px minmax(0,1fr);gap:28px}}
 @media(max-width:800px){
   .reading-layout{display:block}
   .document-nav{position:static;max-height:none;border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:0}
   .document-nav{margin-bottom:22px;overflow:visible}
+  .document-nav:has(>.document-contents[open]){border-bottom-left-radius:0;border-bottom-right-radius:0}
   .document-nav[data-ready]{position:sticky;top:calc(var(--site-header-offset) - 16px);z-index:12;box-shadow:0 5px 16px rgb(25 24 36 / 6%)}
   .document-contents>summary{padding:14px 16px;min-height:50px}
   .document-contents>summary>span{font-size:inherit;font-weight:inherit;transform:none}
@@ -80,10 +86,10 @@
   .document-contents>summary>.contents-current{display:block;font-size:.8125rem;font-weight:400;color:var(--muted);margin-left:auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:45%}
   .document-contents>summary>.contents-current:empty{display:none}
   .document-contents>summary>.icon{display:block;color:var(--brand)}
-  .document-nav nav{display:grid;grid-template-columns:1fr 1fr;gap:0 18px;border:0;padding:0 16px 12px}
+  .document-nav nav{display:grid;grid-template-columns:1fr 1fr;gap:2px 12px;border:0;padding:0 16px 12px;box-shadow:none}
   .document-nav[data-ready] nav{position:absolute;left:-1px;right:-1px;top:calc(100% - 2px);border:1px solid var(--line);border-top:0;border-radius:0 0 10px 10px;background:var(--surface);box-shadow:0 14px 22px rgb(25 24 36 / 10%);padding-top:10px;max-height:calc(100dvh - var(--site-header-offset) - var(--reading-nav-offset) - 16px);overflow:auto;overscroll-behavior:contain}
-  .document-nav a{padding-left:0}
-  .document-nav a[aria-current="location"]{padding-left:10px}
+  .document-nav a{padding:11px 16px}
+  .document-nav[data-ready] .document-contents[open] nav{animation:contents-reveal .2s ease-out}
 }
 @media(max-width:650px){
   .evidence-header{padding-block:20px 23px}
@@ -139,6 +145,8 @@
   .smoke-table td:last-child{position:absolute;width:1px!important;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 }
 @media(max-width:380px){.inventory-fields{grid-template-columns:minmax(0,1fr)}}
+@keyframes contents-reveal{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.document-nav a,.document-nav nav::before,.document-contents>summary>.icon{transition:none}.document-nav[data-ready] .document-contents[open] nav{animation:none}}
 @media print{
   .case-pagination,.inventory-tools{display:none!important}
   #regression-results .table-scroll[hidden]{display:block!important}
