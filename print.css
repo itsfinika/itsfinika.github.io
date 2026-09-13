@@ -1,0 +1,60 @@
+/* Reading pages print on white paper, independently of the screen preference. */
+@page{size:A4;margin:16mm}
+:root,:root[data-theme]{
+  --ink:#111111;--muted:#333333;--line:#aaaaaa;--paper:#ffffff;
+  --surface:#ffffff;--soft:#f4f4f4;--dark:#ffffff;
+  --brand:#222222;--accent:#222222;--marker:#eeeeee;
+  --button-bg:#ffffff;--button-ink:#111111;--button-hover:#ffffff;
+  --note-ink:#111111;--note-muted:#333333;--note-line:#aaaaaa;--note-shadow:transparent;
+  color:#111111;background:#ffffff;color-scheme:light;
+  --site-header-offset:0px;--reading-nav-offset:0px;
+}
+body{color:var(--ink);background:#ffffff}
+.site-header,.document-nav,.back-link,.skip-link,.document-downloads,.document-download,
+.case-pagination,.setup-link,.reading-end,.footer,.inventory-tools,.inventory-empty,
+.evidence-actions .primary{display:none!important}
+.wrap{width:100%;max-width:none;margin:0}
+.evidence-header{padding:0 0 18px}
+.evidence-header h1{font-size:26pt;line-height:1.15}
+.evidence-actions{display:block;padding:0;margin:12px 0 0}
+.evidence-status{display:inline-block;color:var(--ink);background:#ffffff;border:1px solid var(--line)}
+.reading-layout{display:block;padding:0}
+.document-content{min-width:0;max-width:none;padding:0}
+.document-content h2,.document-content h3{break-after:avoid}
+.document-content .test-case,.document-content .finding-section,.document-content .plan-section{margin-top:18px;padding-top:16px}
+.document-content p,.document-content li{orphans:3;widows:3}
+.document-details{border:0;border-radius:0;background:#ffffff;margin:0 0 18px}
+.document-details::details-content{content-visibility:visible}
+.document-details>summary{display:none}
+.document-details .detail-body{padding:0;border:0}
+.document-content .table-scroll{overflow:visible;border:0;border-radius:0;margin:16px 0}
+#regression-results .table-scroll[hidden]{display:block!important}
+.document-content table.adaptive-table{display:table;width:100%;min-width:0;table-layout:fixed;border-collapse:collapse;font-size:10pt}
+.document-content .adaptive-table caption{display:table-caption;width:auto;text-align:left;padding:0 0 8px;font-size:10pt;color:var(--ink)}
+.document-content .adaptive-table thead{display:table-header-group;position:static;width:auto;height:auto;overflow:visible;clip-path:none;white-space:normal}
+.document-content .adaptive-table tbody{display:table-row-group}
+.document-content table.adaptive-table tr{display:table-row!important;break-inside:avoid;padding:0;border:0;border-radius:0;background:#ffffff}
+.document-content .adaptive-table th,.document-content .adaptive-table td{
+  display:table-cell!important;position:static!important;width:auto!important;height:auto!important;
+  min-width:0!important;margin:0;padding:6px 8px!important;
+  border:1px solid var(--line)!important;border-radius:0;clip-path:none!important;
+  overflow:visible!important;white-space:normal!important;vertical-align:top;
+  font-size:10pt;line-height:1.45;color:var(--ink);background:#ffffff;
+}
+.document-content .adaptive-table th{font-weight:600}
+.document-content .adaptive-table .mobile-cell-label{display:none}
+.document-content .adaptive-table .cell-value{line-height:1.45;font-size:10pt;color:var(--ink)}
+.document-content .inventory-table td:last-child .cell-value{padding:0;border:0;background:transparent}
+.document-content .finding-table th:first-child{width:28%!important}
+.document-content .step-table th:first-child{width:7%!important}
+.document-content .inventory-table th:nth-child(1){width:15%!important}
+.document-content .inventory-table th:nth-child(2){width:22%!important}
+.document-content .inventory-table th:nth-child(3){width:51%!important}
+.document-content .inventory-table th:nth-child(4){width:12%!important}
+.document-content .smoke-table th:nth-child(1){width:20%!important}
+.document-content .smoke-table th:nth-child(2){width:22%!important}
+.document-content .smoke-table th:nth-child(3){width:23%!important}
+.document-content .smoke-table th:nth-child(4){width:25%!important}
+.document-content .smoke-table th:nth-child(5){width:10%!important}
+.document-content a{color:#222222;text-decoration:underline}
+.document-content code{overflow-wrap:anywhere;white-space:normal;color:var(--ink);background:#f4f4f4}

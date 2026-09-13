@@ -1,0 +1,51 @@
+Test ID,Area,Title,Priority
+REG-001,Authentication,Valid Login-Standard Credentials,High
+REG-002,Authentication,"Login-New Password Validation (12+ Characters, Special Character)",High
+REG-003,Authentication,Login-Rejection of Password Below 12 Characters,High
+REG-004,Authentication,Login-Rejection of Password Without Special Character,High
+REG-005,Authentication,Logout-Session Termination,High
+REG-006,Course Catalogue & Search,Basic Search-Single Keyword Query,High
+REG-007,Course Catalogue & Search,Advanced Search-Query With More Than Three Keywords,High
+REG-008,Course Catalogue & Search,Search-No Results Returned for Unrecognized Query,High
+REG-009,Course Catalogue & Search,Search Results-Correct Course Listed for Exact Title Match,High
+REG-010,Authentication,Password Reset Flow-End to End,Medium
+REG-011,Authentication,Session Timeout After Inactivity,Medium
+REG-012,Authentication,Remember Me Persists Session Across Browser Restart,Low
+REG-013,Course Catalogue & Search,Browse Catalog-All Courses Display,Medium
+REG-014,Course Catalogue & Search,Filter by Category Returns Correct Subset,Medium
+REG-015,Course Catalogue & Search,Sort by Price Ascending,Medium
+REG-016,Course Catalogue & Search,Sort by Price Descending,Medium
+REG-017,Course Catalogue & Search,Course Detail-Full Description and Pricing Display,Medium
+REG-018,Course Catalogue & Search,Pagination-Navigate to Next Page of Results,Low
+REG-019,Course Catalogue & Search,Search-Special Characters Handled Gracefully,Low
+REG-020,Enrollment & Cart,Add Single Course to Enrollment List,High
+REG-021,Enrollment & Cart,Remove Course from Enrollment List,Medium
+REG-022,Enrollment & Cart,Add Multiple Courses to List,Medium
+REG-023,Enrollment & Cart,Empty Cart State Displays Correct Message,Low
+REG-024,Enrollment & Cart,Duplicate Add Shows Appropriate Feedback,Medium
+REG-025,Checkout & Payment,Proceed to Checkout From Cart,High
+REG-026,Checkout & Payment,Mock Card Payment-Successful Transaction,High
+REG-027,Checkout & Payment,Invalid Card Number Rejected,High
+REG-028,Checkout & Payment,Expired Card Rejected,Medium
+REG-029,Checkout & Payment,Checkout Summary Reflects Cart Items,Medium
+REG-030,Checkout & Payment,Payment Confirmation Page Displays,High
+REG-031,Dashboard,Dashboard Loads With User Greeting,High
+REG-032,Dashboard,Recent Activity Shows Enrollment Entries,High
+REG-033,Dashboard,Recent Activity Shows Payment Entries,High
+REG-034,Dashboard,Enrolled Courses List Displays Correct Courses,High
+REG-035,Dashboard,Grades Section Shows Course Grades,Medium
+REG-036,Profile & Account,View Profile Information,Medium
+REG-037,Profile & Account,Update Display Name,Medium
+REG-038,Profile & Account,Change Password With Valid Current Password,Medium
+REG-039,Profile & Account,Email Field Read-Only for Standard Users,Low
+REG-040,Profile & Account,Notification Preferences Save Successfully,Low
+REG-041,Admin,Admin Login With Seeded Credentials,High
+REG-042,Admin,Admin Dashboard Loads Course Management,High
+REG-043,Admin,Create New Course Entry,Medium
+REG-044,Admin,Edit Existing Course Details,Medium
+REG-045,Admin,Deactivate Course Removes From Catalog,Medium
+REG-046,Admin,View User Enrollment Report,Medium
+REG-047,Admin,Export Enrollment Data CSV,Low
+REG-048,Admin,Search Users by Email in Admin Panel,Low
+REG-049,Admin,Admin Cannot Access Student-Only Routes Without Role,High
+REG-050,Admin,Audit Log Records Admin Actions,Low
