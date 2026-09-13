@@ -379,22 +379,42 @@
     const wide = window.matchMedia('(min-width: 1101px)');
     const rows = [
       ['meta', '.project-meta'], ['title', 'h3'],
-      ['description', '.project-body > h3 + p'], ['tags', '.tags']
+      ['description', '.project-body > h3 + p'], ['tags', '.tags'],
+      ['action', '.read-evidence'], ['summary', '.project-context > summary']
     ].map(([name, selector]) => ({ name, elements: [...grid.querySelectorAll(selector)] }));
+    const contexts = [...grid.querySelectorAll('.project-context')];
+    const contextRows = [
+      ['heading-1', '.case-content > h4:nth-of-type(1)'],
+      ['description-1', '.case-content > p:nth-of-type(1)'],
+      ['heading-2', '.case-content > h4:nth-of-type(2)'],
+      ['description-2', '.case-content > p:nth-of-type(2)'],
+      ['download-1', '.context-downloads > a:nth-child(1)'],
+      ['download-2', '.context-downloads > a:nth-child(2)']
+    ];
     let layoutKey = '';
     function alignRows() {
-      const key = `${grid.clientWidth}:${getComputedStyle(root).fontSize}:${wide.matches}`;
+      const key = `${grid.clientWidth}:${getComputedStyle(root).fontSize}:${wide.matches}:${contexts.map(detail => Number(detail.open)).join('')}`;
       if (key === layoutKey) return;
       layoutKey = key;
       rows.forEach(({ name }) => grid.style.removeProperty(`--work-${name}-height`));
+      contextRows.forEach(([name]) => grid.style.removeProperty(`--context-${name}-height`));
+      grid.style.removeProperty('--context-downloads-height');
       if (!wide.matches) return;
       // Measure natural text wrapping once, then share each row's tallest item.
       const heights = rows.map(({ elements }) => Math.ceil(Math.max(...elements.map(element => element.getBoundingClientRect().height))));
       rows.forEach(({ name }, i) => grid.style.setProperty(`--work-${name}-height`, `${heights[i]}px`));
+      // Only expanded neighbours share context rows; closed cards stay compact.
+      const expanded = contexts.filter(detail => detail.open);
+      if (expanded.length < 2) return;
+      const contextHeights = contextRows.map(([, selector]) => Math.ceil(Math.max(0, ...expanded.map(detail => detail.querySelector(selector)?.getBoundingClientRect().height || 0))));
+      contextRows.forEach(([name], i) => grid.style.setProperty(`--context-${name}-height`, `${contextHeights[i]}px`));
+      const downloadsHeight = Math.ceil(Math.max(...expanded.map(detail => detail.querySelector('.context-downloads').getBoundingClientRect().height)));
+      grid.style.setProperty('--context-downloads-height', `${downloadsHeight}px`);
     }
     alignRows();
     if ('ResizeObserver' in window) new ResizeObserver(alignRows).observe(grid);
     window.addEventListener('resize', alignRows);
+    grid.addEventListener('toggle', alignRows, true);
     wide.addEventListener('change', alignRows);
   }
 

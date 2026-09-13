@@ -182,11 +182,29 @@
 @media(max-width:650px){.section-heading{gap:12px}}
 
 /* Align desktop work rows using their content, without fixed empty space. */
+.project-context .case-content{padding:8px 0 20px}
+.project-context .case-content>h4{margin:0 0 8px;line-height:1.5}
+.project-context .case-content>p{margin:0 0 20px;overflow-wrap:anywhere}
+.context-downloads .artifact-link{min-height:48px;align-items:flex-start;line-height:1.6}
+.context-downloads .link-label{align-items:flex-start}
+.context-downloads .link-label>.icon{margin-top:calc((1.6em - 20px)/2)}
 @media(min-width:1101px){
   .project-meta{min-height:var(--work-meta-height,0px)}
   .project h3{min-height:var(--work-title-height,0px)}
   .project-body>p:not(.project-meta){min-height:var(--work-description-height,0px)}
   .project-body .tags{min-height:var(--work-tags-height,0px)}
+  .project-body>.read-evidence{min-height:var(--work-action-height,54px);align-items:flex-start}
+  .project-body>.read-evidence>.link-label{align-items:flex-start}
+  .project-body>.read-evidence>.link-label>.icon{margin-top:calc((1.5em - 20px)/2)}
+  .project-body>.read-evidence>.icon{margin-top:calc((1.5em - 18px)/2)}
+  .project-body>.project-context>summary{min-height:var(--work-summary-height,54px)}
+  .project-context .case-content>h4:nth-of-type(1){min-height:var(--context-heading-1-height,0px)}
+  .project-context .case-content>p:nth-of-type(1){min-height:var(--context-description-1-height,0px)}
+  .project-context .case-content>h4:nth-of-type(2){min-height:var(--context-heading-2-height,0px)}
+  .project-context .case-content>p:nth-of-type(2){min-height:var(--context-description-2-height,0px)}
+  .context-downloads{min-height:var(--context-downloads-height,0px)}
+  .context-downloads>.artifact-link:nth-child(1){min-height:var(--context-download-1-height,48px)}
+  .context-downloads>.artifact-link:nth-child(2){min-height:var(--context-download-2-height,48px)}
 }
 
 /* Rotating examples share one grid cell so the hero never jumps between cards. */
