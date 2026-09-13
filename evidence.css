@@ -41,12 +41,12 @@
 .inventory-table td:first-child .cell-value{white-space:nowrap;font-size:.875rem;font-weight:600;color:var(--brand)}
 .inventory-table td:last-child .cell-value{display:inline-block;padding:3px 9px;border:1px solid var(--line);border-radius:5px;font-size:.8125rem;color:var(--ink);background:var(--soft)}
 .document-nav nav{gap:2px;border:0;box-shadow:inset 1px 0 0 var(--line);position:relative;isolation:isolate}
-.document-nav nav::before{content:"";display:none;position:absolute;left:0;top:0;width:var(--reading-width,0px);height:var(--reading-height,0px);transform:translate(var(--reading-x,0px),var(--reading-y,0px));background:var(--soft);border-left:2px solid var(--brand);border-radius:0 6px 6px 0;pointer-events:none;z-index:0;transition:transform .38s cubic-bezier(.22,.61,.36,1),width .38s cubic-bezier(.22,.61,.36,1),height .38s cubic-bezier(.22,.61,.36,1)}
+.document-nav nav::before{content:"";display:none;position:absolute;left:0;top:0;box-sizing:border-box;width:2px;height:var(--reading-height,0px);transform:translate(var(--reading-x,0px),var(--reading-y,0px));background:transparent;border-left:2px solid var(--brand);border-radius:0;pointer-events:none;z-index:0;transition:transform .38s cubic-bezier(.22,.61,.36,1),height .38s cubic-bezier(.22,.61,.36,1)}
 .document-nav nav[data-reading-indicator]::before{display:block}
 .document-nav a{position:relative;z-index:1;font-size:.875rem;font-weight:500;line-height:1.5;padding:11px 16px;min-height:44px;min-width:0;overflow-wrap:anywhere;border-radius:0 6px 6px 0;transition:color .2s,background-color .2s}
-.document-nav a:hover{color:var(--brand);background:var(--soft);text-decoration:none}
+.document-nav a:hover{color:var(--brand);background:transparent;text-decoration:none}
 .document-nav a[aria-current="location"]{background:transparent}
-.document-nav nav:not([data-reading-indicator]) a[aria-current="location"]{background:var(--soft);box-shadow:inset 2px 0 0 var(--brand)}
+.document-nav nav:not([data-reading-indicator]) a[aria-current="location"]{background:transparent;box-shadow:inset 2px 0 0 var(--brand)}
 .document-nav a:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
 .document-content h2{scroll-margin-top:10px}
 .document-content .test-case,.document-content .finding-section,.document-content .plan-section{margin-top:30px;padding-top:28px;border-top:1px solid var(--line)}

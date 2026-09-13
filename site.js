@@ -258,7 +258,6 @@
       const position = {
         x: item.left - list.left - readingLinks.clientLeft + readingLinks.scrollLeft,
         y: item.top - list.top - readingLinks.clientTop + readingLinks.scrollTop,
-        width: item.width,
         height: item.height
       };
       for (const [property, value] of Object.entries(position)) readingLinks.style.setProperty(`--reading-${property}`, `${value}px`);
