@@ -209,6 +209,21 @@
 .note-actions .icon{width:17px;height:17px}
 .note-carousel .note-actions[hidden]{display:none}
 .note-announcement{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+
+/* Neighbouring cards share their natural text rows without fixed heights. */
+@supports(grid-template-rows:subgrid){
+  @media(min-width:541px){
+    .skill-card,.certificate-card{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:subgrid;grid-row:span 4;row-gap:0}
+    .skill-heading{display:grid;grid-template-columns:36px minmax(0,1fr);grid-template-rows:subgrid;grid-row:1 / span 2;row-gap:0}
+    .skill-heading>.feature-icon{grid-column:1;grid-row:1 / span 2;align-self:start}
+    .skill-heading>div{display:grid;grid-template-rows:subgrid;grid-column:2;grid-row:1 / span 2;row-gap:0}
+    .skill-heading h3,.skill-heading .skill-level{align-self:start}
+    .skill-description{grid-row:3;align-self:start}
+    .skill-evidence{grid-row:4;align-self:start}
+    .certificate-top,.certificate-card>h3,.certificate-card>p{align-self:start}
+    .certificate-bottom{margin-top:0;align-items:flex-start}
+  }
+}
 @media(max-width:540px){.note-carousel .note-top{padding-block:9px;min-height:58px}.note-carousel .test-input{gap:7px 14px}}
 @media print{.note-carousel .note-actions{display:none}.note-carousel[data-ready] .note-deck{display:block}.note-carousel[data-ready] .note-slide[hidden]{display:none}}
 
