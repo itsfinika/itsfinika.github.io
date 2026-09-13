@@ -33,6 +33,76 @@
     if (!preference) apply(preferredTheme());
   });
 
+  const pageMotionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let pageScroll = null;
+
+  function stopPageScroll(finish = false) {
+    if (!pageScroll) return;
+    const motion = pageScroll;
+    pageScroll = null;
+    cancelAnimationFrame(motion.frame);
+    if (finish) {
+      window.scrollTo(0, motion.end);
+      if (motion.focus) motion.target.focus({ preventScroll: true });
+    }
+    delete root.dataset.pageScrolling;
+    window.dispatchEvent(new Event('portfolio-scroll-state'));
+  }
+
+  function scrollToSection(target, { focus = true, instant = false } = {}) {
+    stopPageScroll();
+    if (focus && !target.hasAttribute('tabindex') && !target.matches('a,button,input,select,textarea,summary')) target.setAttribute('tabindex', '-1');
+    const start = window.scrollY;
+    const padding = parseFloat(getComputedStyle(root).scrollPaddingTop) || 0;
+    const margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+    const end = Math.max(0, Math.min(root.scrollHeight - innerHeight, start + target.getBoundingClientRect().top - padding - margin));
+    const distance = end - start;
+    const duration = Math.min(1000, Math.max(440, 400 + Math.sqrt(Math.abs(distance)) * 8));
+    const motion = { target, start, end, focus, frame: null, started: null };
+    pageScroll = motion;
+    root.dataset.pageScrolling = '';
+    window.dispatchEvent(new Event('portfolio-scroll-state'));
+    if (instant || pageMotionPreference.matches || Math.abs(distance) < 1) {
+      stopPageScroll(true);
+      return;
+    }
+    function step(now) {
+      if (pageScroll !== motion) return;
+      motion.started ??= now;
+      const progress = Math.min((now - motion.started) / duration, 1);
+      const eased = progress < .5 ? 4 * progress ** 3 : 1 - (-2 * progress + 2) ** 3 / 2;
+      window.scrollTo(0, start + distance * eased);
+      if (progress < 1) motion.frame = requestAnimationFrame(step);
+      else stopPageScroll(true);
+    }
+    motion.frame = requestAnimationFrame(step);
+  }
+
+  function setupSmoothNavigation() {
+    document.addEventListener('click', event => {
+      const link = event.target.closest('a[href]');
+      if (!link || link.hasAttribute('download') || (link.target && link.target !== '_self') || event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      const url = new URL(link.href, location.href);
+      const normalPath = path => path.replace(/\/index\.html$/, '/');
+      if (!url.hash || url.origin !== location.origin || normalPath(url.pathname) !== normalPath(location.pathname) || url.search !== location.search) return;
+      let target;
+      try { target = document.getElementById(decodeURIComponent(url.hash.slice(1))); } catch { return; }
+      if (!target) return;
+      event.preventDefault();
+      if (location.hash !== url.hash) history.pushState(null, '', url.hash);
+      scrollToSection(target);
+    });
+    // Keep normal wheel, touch and keyboard scrolling in the browser's control.
+    for (const event of ['wheel', 'touchstart', 'pointerdown']) window.addEventListener(event, () => stopPageScroll(), { passive: true });
+    window.addEventListener('keydown', event => {
+      if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', 'Escape', ' '].includes(event.key)) stopPageScroll();
+    });
+    window.addEventListener('resize', () => stopPageScroll());
+    window.addEventListener('pagehide', () => stopPageScroll());
+    window.addEventListener('popstate', () => stopPageScroll());
+    pageMotionPreference.addEventListener('change', () => { if (pageMotionPreference.matches) stopPageScroll(true); });
+  }
+
   function setupSectionNavigation() {
     const nav = document.querySelector('.section-jump');
     if (!nav) return;
@@ -40,6 +110,7 @@
     const menu = nav.querySelector('details');
     const summary = nav.querySelector('summary');
     const links = [...nav.querySelectorAll('.jump-links a')];
+    const linkList = nav.querySelector('.jump-links');
     const entries = links.map(link => ({ link, section: document.getElementById(link.hash.slice(1)) })).filter(entry => entry.section);
     const narrow = window.matchMedia('(max-width: 1000px)');
     const bar = header.querySelector('.header');
@@ -49,6 +120,19 @@
 
     entries.forEach(({ section }) => section.setAttribute('tabindex', '-1'));
 
+    function positionIndicator(link) {
+      if (!link || (compact && !menu.open)) {
+        delete linkList.dataset.indicator;
+        return;
+      }
+      const item = link.getBoundingClientRect();
+      const list = linkList.getBoundingClientRect();
+      for (const [property, value] of Object.entries({ x: item.left - list.left, y: item.top - list.top, width: item.width, height: item.height })) {
+        linkList.style.setProperty(`--jump-${property}`, `${value}px`);
+      }
+      linkList.dataset.indicator = '';
+    }
+
     function updateCurrent() {
       scheduled = false;
       const offset = parseFloat(getComputedStyle(root).scrollPaddingTop) + 8;
@@ -57,10 +141,12 @@
         if (entry.section.getBoundingClientRect().top <= offset) current = entry;
       });
       if (entries.length && window.scrollY + window.innerHeight >= root.scrollHeight - 2) current = entries[entries.length - 1];
+      current = entries.find(entry => entry.section === pageScroll?.target) || current;
       entries.forEach(entry => {
         if (entry === current) entry.link.setAttribute('aria-current', 'location');
         else entry.link.removeAttribute('aria-current');
       });
+      positionIndicator(current?.link);
     }
 
     function scheduleUpdate() {
@@ -78,6 +164,7 @@
       // Measure the actual full navigation before choosing the compact layout.
       // This also covers enlarged text, rather than relying only on viewport width.
       header.removeAttribute('data-compact');
+      delete linkList.dataset.indicator;
       menu.open = true;
       const nextCompact = narrow.matches || nav.querySelector('.jump-links').scrollWidth > nav.clientWidth + 1;
       header.toggleAttribute('data-compact', nextCompact);
@@ -115,6 +202,7 @@
     window.addEventListener('scroll', scheduleUpdate, { passive: true });
     window.addEventListener('resize', () => { updateLayout(); updateHeaderOffset(); });
     window.addEventListener('hashchange', scheduleUpdate);
+    window.addEventListener('portfolio-scroll-state', scheduleUpdate);
     window.addEventListener('load', scheduleUpdate);
     header.dataset.ready = '';
     updateLayout();
@@ -199,8 +287,7 @@
       if (!target || !content.contains(target)) return;
       reveal(target);
       requestAnimationFrame(() => {
-        target.scrollIntoView({ block: 'start' });
-        if (focus) target.focus({ preventScroll: true });
+        scrollToSection(target, { focus, instant: !focus });
       });
     }
     document.addEventListener('click', event => {
@@ -321,6 +408,7 @@
       if (!transition) return;
       const finished = transition;
       transition = null;
+      clearTimeout(finished.timeout);
       finished.animations.forEach(animation => animation.cancel());
       delete finished.outgoing.dataset.leaving;
       const pending = pendingSlide;
@@ -344,20 +432,33 @@
         slide.inert = i !== index;
         slide.setAttribute('aria-hidden', String(i !== index));
       });
-      if (changed && !reducedMotion.matches && slides[index].animate) {
+      if (changed && !reducedMotion.matches && typeof slides[index].animate === 'function') {
         // The outgoing card stays visually present but hidden from keyboard and
         // assistive technology. Both cards keep their existing shared grid size.
         outgoing.dataset.leaving = '';
+        const animations = [];
+        try {
         const exit = outgoing.animate([
           { transform: 'translateX(0) scale(1)' },
           { transform: `translateX(${-direction * 100}%) scale(.98)` }
         ], { duration: 680, easing: 'cubic-bezier(.22,.61,.36,1)', fill: 'forwards' });
+        animations.push(exit);
         const enter = slides[index].animate([
           { transform: `translateX(${direction * 100}%) scale(.985)` },
           { transform: 'translateX(0) scale(1)' }
         ], { duration: 680, easing: 'cubic-bezier(.22,.61,.36,1)', fill: 'both' });
-        transition = { outgoing, animations: [exit, enter] };
-        enter.onfinish = finishTransition;
+        animations.push(enter);
+        const running = { outgoing, animations, timeout: null };
+        transition = running;
+        const finish = () => { if (transition === running) finishTransition(); };
+        enter.onfinish = finish;
+        enter.oncancel = finish;
+        // Never lock the arrows if an engine omits an animation completion event.
+        running.timeout = setTimeout(finish, 900);
+        } catch {
+          animations.forEach(animation => animation.cancel());
+          delete outgoing.dataset.leaving;
+        }
       }
       if (announce) announcement.textContent = `Example ${index + 1} of ${slides.length}. ${slides[index].querySelector('h2').textContent}`;
       syncPlayback();
@@ -455,6 +556,7 @@
     });
     setupSectionNavigation();
     setupEvidenceReading();
+    setupSmoothNavigation();
     setupInventoryFilters();
     setupNoteCarousel();
     setupProjectRows();
