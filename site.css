@@ -254,6 +254,17 @@
 .volunteer-card h4{font-size:1.125rem;line-height:1.4;letter-spacing:-.015em;text-wrap:pretty}
 .volunteer-card p{font-size:.9375rem;line-height:1.7;color:var(--muted);margin-top:14px}
 .volunteer-card .volunteer-date{font-size:.8125rem;margin-top:8px}
+/* Keep matching rows aligned when neighbouring titles or dates wrap. */
+@supports(grid-template-rows:subgrid){
+  @media(min-width:801px){
+    .volunteer-card,.education-grid article{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:subgrid;grid-row:span 4;row-gap:0}
+    .volunteer-card>*,.education-grid article>*{align-self:start;min-width:0}
+    .volunteer-kind{margin:0 0 16px}
+    .volunteer-card .volunteer-date{margin:8px 0 20px}
+    .volunteer-card>p:last-child{margin:0 0 20px}
+    .education-grid h4{min-height:0}
+  }
+}
 .work-preferences{display:grid;gap:12px;margin:24px 0 0;padding:20px 0;border-block:1px solid var(--line)}
 .work-preferences>div{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:16px;font-size:.9375rem;line-height:1.55;overflow-wrap:anywhere}
 .work-preferences dt{color:var(--muted)}
