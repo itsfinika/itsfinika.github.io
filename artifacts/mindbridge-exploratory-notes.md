@@ -1,6 +1,6 @@
 # MindBridge registration - exploratory session notes
 
-Polina Zheltoshtan's recorded observations from a guided course lab using MindBridge, a fictional learning portal. This portfolio edition separates four behaviours described in the original three findings. It adds no new execution results.
+I explored registration input validation and state changes in MindBridge, a fictional learning portal, during a guided course lab. These notes describe four behaviours I observed in one recorded session.
 
 ## Session context
 
@@ -9,7 +9,7 @@ Polina Zheltoshtan's recorded observations from a guided course lab using MindBr
 - Lab address: http://localhost:3000. This is a local test environment, not a public demo.
 - Charter: explore registration input validation and state changes.
 - Approach: repeated input/submission, interruption through browser Back, and whitespace-only input.
-- Evidence available: written session notes. Browser, OS, build identifier and screenshots are not recorded in the supplied material. The observations below describe the visible UI, not database or network verification.
+- Evidence available: written session notes. The notes do not include the browser, OS, build identifier or screenshots. The observations describe the visible UI, not database or network verification.
 
 ## Duplicate email rejected
 
@@ -49,7 +49,7 @@ Polina Zheltoshtan's recorded observations from a guided course lab using MindBr
 
 ## Session outcome
 
-No defects were confirmed in this short session. Duplicate-email rejection, browser Back state and whitespace validation matched the exercise expectations. Rapid submission reached the Dashboard, but its server-side outcome needs further evidence.
+I did not confirm any defects in this session. Duplicate-email rejection, browser Back state and whitespace validation matched the exercise expectations. Rapid submission reached the Dashboard, but I would need request and data-level evidence to confirm its server-side outcome.
 
 ## Follow-up checks
 
@@ -59,4 +59,4 @@ No defects were confirmed in this short session. Duplicate-email rejection, brow
 
 ## Course context
 
-The exercise supplied a charter, heuristics and a known-defect solution key. Its duplicate-registration, password-loss and whitespace-name defects were not reproduced in the recorded session. A different lab build is a possible explanation, not a confirmed cause. The original notes contain the course self-assessment; this edition focuses on actions, observations and limits of the evidence.
+The exercise supplied a charter, heuristics and a known-defect solution key. I did not reproduce its duplicate-registration, password-loss or whitespace-name defects in this session. A different lab build could explain this, but I have not confirmed that. These notes focus on my actions, observations and the limits of the available evidence.

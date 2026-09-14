@@ -1,6 +1,6 @@
 # MindBridge - smoke plan and regression reference
 
-Guided coursework for a fictional learning portal. The 50-item master regression inventory is course reference material. The smoke CSV is a planning exercise, revised for this portfolio with clearer setup and expected outcomes. Neither file establishes completed execution or a successful import into a test-management tool.
+I prepared this smoke plan as a guided exercise for the fictional MindBridge portal. I refined the setup and expected outcomes for the ten smoke checks. The separate 50-item regression inventory comes from the course and is included as reference material. These files contain no execution results or evidence of an import into a test-management tool.
 
 ## Smoke setup
 
@@ -33,4 +33,4 @@ These are proposed checks with expected outcomes, not Pass/Fail records. The 50 
 
 REG-001 through REG-050 retain the order, areas, titles and priorities of the course inventory. They correspond to its original TC-001 through TC-050. SMK-001 through SMK-010 identify the smoke CSV rows separately, so the same ID cannot mean different checks. Student Profile keeps its separate TC-SP IDs.
 
-CSV downloads are portfolio editions. Typography is normalised to short hyphens, and smoke steps/outcomes have been edited for clarity. No claim is made that the current portfolio edits have been executed.
+The CSV files contain planned checks and reference material, not execution results.

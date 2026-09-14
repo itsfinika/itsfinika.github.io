@@ -1,6 +1,6 @@
 # MindBridge Student Profile - five test cases
 
-Test-design practice by Polina Zheltoshtan, based on scenarios and reference examples from a guided software testing course. MindBridge is a fictional learning portal. These cases are authored, not executed.
+I prepared these five test cases as test-design practice, using scenarios and reference examples from a guided software testing course. MindBridge is a fictional learning portal. I have not executed these cases.
 
 ## Shared fields and conventions
 
@@ -9,7 +9,7 @@ Test-design practice by Polina Zheltoshtan, based on scenarios and reference exa
 - Each case starts independently from this baseline. Restore it after the case using the application's supported reset controls.
 - Test files are included in the ZIP: fixtures/profile_valid.png is a 316-byte PNG showing a blue-and-gold square; fixtures/profile_invalid.txt is a 62-byte plain-text file.
 - Course fields: Issue Type = Test; Priority = Medium; Labels = student-profile, sc10. TC-SP IDs identify this exercise, not Jira issues.
-- Environment: the reference page is /profile/edit. Confirm the lab base URL and build before execution. No execution results are assigned to this revision.
+- Environment: the reference page is /profile/edit. Confirm the lab base URL and build before execution.
 
 ## Requirement traceability
 
@@ -92,4 +92,4 @@ This case covers saving the preference. Email delivery is outside its scope.
 
 This is a five-scenario coursework sample: three positive cases and two negative cases. It is not complete coverage of the profile feature. Oversized uploads, exact size boundaries, whitespace-only names and re-enabling notifications are possible extensions after confirming requirements.
 
-The scenarios and reference examples came from the course's Test_Scenarios.md, Gold_Standard_Test_Case.md, Gold_Standard_Description.txt and the Write 5 Test Cases in Zephyr activity. This portfolio edition presents the authored cases with concise steps, independent setup and bundled fixtures. It does not claim a completed Jira import or test execution.
+I used the course's Test_Scenarios.md, Gold_Standard_Test_Case.md, Gold_Standard_Description.txt and the Write 5 Test Cases in Zephyr activity as references. My version uses concise steps, independent setup and bundled fixtures. It does not include execution results or evidence of a completed Jira import.
