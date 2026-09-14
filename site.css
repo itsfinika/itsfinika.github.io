@@ -284,3 +284,22 @@
     padding-bottom:calc(48px + clamp(0px,calc(100svh - 720px),96px));
   }
 }
+
+/* Expand the shared page edges gradually on large desktop displays. */
+@media screen and (min-width:1440px){
+  .portfolio-page .wrap{width:min(clamp(1240px,calc(25vw + 880px),1360px),calc(100% - 96px))}
+}
+@media screen and (min-width:1600px){
+  .hero-personal .hero-intro{max-width:560px;font-size:1.125rem}
+  .hero-proof .note-top{min-height:70px;padding:14px 26px;font-size:.875rem}
+  .hero-proof .note-body{padding:28px 32px}
+  .hero-proof .note-body h2{font-size:2.8rem}
+  .hero-proof .note-label{font-size:.875rem}
+  .hero-proof .test-input{font-size:.9375rem;margin-top:28px;padding:13px 18px}
+  .hero-proof .test-input .input-description{font-size:.875rem}
+  .hero-proof .note-result{gap:14px;margin-top:22px}
+  .hero-proof .note-result strong{font-size:.9375rem}
+  .hero-proof .note-result p{font-size:.875rem}
+  .hero-proof .note-bottom{padding:18px 26px;font-size:.875rem}
+  .hero-proof .hero-motto{font-size:1.125rem}
+}
