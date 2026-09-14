@@ -79,7 +79,10 @@
   .document-nav{position:static;max-height:none;border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:0}
   .document-nav{margin-bottom:22px;overflow:visible}
   .document-nav:has(>.document-contents[open]){border-bottom-left-radius:0;border-bottom-right-radius:0}
-  .document-nav[data-ready]{position:sticky;top:calc(var(--site-header-offset) - 16px);z-index:12;box-shadow:0 5px 16px rgb(25 24 36 / 6%)}
+  /* Keep the spacing inside an opaque sticky surface, so earlier controls cannot peek through. */
+  .document-nav[data-ready]{position:sticky;top:calc(var(--site-header-offset) - 24px);z-index:12;padding-top:8px;border:0;border-radius:0;background:var(--paper)}
+  .document-nav[data-ready]>.document-contents{border:1px solid var(--line);border-radius:10px;background:var(--surface);box-shadow:0 5px 16px rgb(25 24 36 / 6%)}
+  .document-nav[data-ready]>.document-contents[open]{border-bottom-left-radius:0;border-bottom-right-radius:0}
   .document-contents>summary{padding:14px 16px;min-height:50px}
   .document-contents>summary>span{font-size:inherit;font-weight:inherit;transform:none}
   .document-contents[open]>summary>span{transform:none}
@@ -87,7 +90,7 @@
   .document-contents>summary>.contents-current:empty{display:none}
   .document-contents>summary>.icon{display:block;color:var(--brand)}
   .document-nav nav{display:grid;grid-template-columns:1fr 1fr;gap:2px 12px;border:0;padding:0 16px 12px;box-shadow:none}
-  .document-nav[data-ready] nav{position:absolute;left:-1px;right:-1px;top:calc(100% - 2px);border:1px solid var(--line);border-top:0;border-radius:0 0 10px 10px;background:var(--surface);box-shadow:0 14px 22px rgb(25 24 36 / 10%);padding-top:10px;max-height:calc(100dvh - var(--site-header-offset) - var(--reading-nav-offset) - 16px);overflow:auto;overscroll-behavior:contain}
+  .document-nav[data-ready] nav{position:absolute;left:0;right:0;top:calc(100% - 2px);border:1px solid var(--line);border-top:0;border-radius:0 0 10px 10px;background:var(--surface);box-shadow:0 14px 22px rgb(25 24 36 / 10%);padding-top:10px;max-height:calc(100dvh - var(--site-header-offset) - var(--reading-nav-offset) - 16px);overflow:auto;overscroll-behavior:contain}
   .document-nav a{padding:11px 16px}
   .document-nav[data-ready] .document-contents[open] nav{animation:contents-reveal .2s ease-out}
 }
