@@ -3,8 +3,12 @@
   const storageKey = 'polina-portfolio-theme';
   const root = document.documentElement;
   const valid = theme => theme === 'light' || theme === 'dark';
+  const pageMotionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let themeTransition = null;
+  let themeChangeId = 0;
+  let themeFadeTimer;
 
-  function apply(theme) {
+  function renderTheme(theme) {
     root.dataset.theme = valid(theme) ? theme : 'light';
     const dark = root.dataset.theme === 'dark';
     const meta = document.querySelector('meta[name="theme-color"]');
@@ -21,6 +25,58 @@
     });
   }
 
+  function apply(theme, animate = false) {
+    const next = valid(theme) ? theme : 'light';
+    const changeId = ++themeChangeId;
+    themeTransition?.skipTransition();
+    themeTransition = null;
+    clearTimeout(themeFadeTimer);
+    delete root.dataset.themeTransition;
+    const update = () => { if (changeId === themeChangeId) renderTheme(next); };
+    if (!animate || pageMotionPreference.matches || document.hidden || !document.body || next === root.dataset.theme) {
+      delete root.dataset.themeFading;
+      update();
+      return;
+    }
+    const fadeColours = () => {
+      root.dataset.themeFading = '';
+      // Establish the transition before changing the palette, including a rapid reversal.
+      getComputedStyle(root).backgroundColor;
+      update();
+      themeFadeTimer = setTimeout(() => {
+        if (changeId === themeChangeId) delete root.dataset.themeFading;
+      }, 500);
+    };
+    if (typeof document.startViewTransition !== 'function') {
+      fadeColours();
+      return;
+    }
+    delete root.dataset.themeFading;
+    const toggle = document.querySelector('[data-theme-toggle]')?.getBoundingClientRect();
+    const x = toggle ? toggle.left + toggle.width / 2 : innerWidth / 2;
+    const y = toggle ? toggle.top + toggle.height / 2 : innerHeight / 2;
+    const radius = Math.ceil(Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)));
+    root.style.setProperty('--theme-origin-x', `${x}px`);
+    root.style.setProperty('--theme-origin-y', `${y}px`);
+    root.style.setProperty('--theme-reveal-radius', `${radius}px`);
+    root.dataset.themeTransition = '';
+    try {
+      const transition = document.startViewTransition(update);
+      themeTransition = transition;
+      // Superseding a transition can reject ready, while its update still completes.
+      transition.ready.catch(() => {});
+      transition.finished.catch(update).finally(() => {
+        if (changeId === themeChangeId) {
+          themeTransition = null;
+          delete root.dataset.themeTransition;
+        }
+      });
+    } catch {
+      delete root.dataset.themeTransition;
+      fadeColours();
+    }
+  }
+
   const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
   let preference = null;
   const preferredTheme = () => preference || (systemTheme.matches ? 'dark' : 'light');
@@ -30,10 +86,16 @@
   } catch { /* The theme still works when browser storage is unavailable. */ }
   apply(preferredTheme());
   systemTheme.addEventListener('change', () => {
-    if (!preference) apply(preferredTheme());
+    if (!preference) apply(preferredTheme(), true);
   });
 
-  const pageMotionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  pageMotionPreference.addEventListener('change', () => {
+    if (pageMotionPreference.matches) apply(preferredTheme());
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) apply(preferredTheme());
+  });
+  window.addEventListener('beforeprint', () => apply(preferredTheme()));
   let pageScroll = null;
 
   function stopPageScroll(finish = false) {
@@ -589,9 +651,9 @@
     apply(root.dataset.theme);
     document.querySelectorAll('[data-theme-toggle]').forEach(button => {
       button.addEventListener('click', () => {
-        const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        const next = (preference || root.dataset.theme) === 'dark' ? 'light' : 'dark';
         preference = next;
-        apply(next);
+        apply(next, true);
         try { localStorage.setItem(storageKey, next); } catch { /* Optional preference only. */ }
       });
     });
@@ -607,7 +669,7 @@
   window.addEventListener('storage', event => {
     if (event.key === storageKey || event.key === null) {
       preference = valid(event.newValue) ? event.newValue : null;
-      apply(preferredTheme());
+      apply(preferredTheme(), true);
     }
   });
 })();

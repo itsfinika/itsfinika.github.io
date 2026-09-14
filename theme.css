@@ -2,3 +2,24 @@
 :root{--ink:#242332;--muted:#616170;--line:#dedee7;--paper:#fafafd;--dark:#191824;--brand:#5847ca;--accent:#bdb3ff;--marker:#d5ceff;--button-bg:#5847ca;--button-ink:#ffffff;--button-hover:#4938b7;--soft:#f0eef8;--surface:#ffffff;--note-ink:#f5f3ff;--note-muted:#c0bbcF;--note-line:#4b465e;--note-shadow:#e4e0f0;--illustration-bg:#eeebfa;--illustration-line:#c4bbdf;--illustration-ink:#4f4078;--illustration-inner:#e3dcf5;color:var(--ink);background:var(--paper);color-scheme:light}
 :root[data-theme="dark"]{--ink:#f1eff8;--muted:#b7b3c7;--line:#3c394b;--paper:#14141c;--dark:#1e1c2a;--brand:#bdb3ff;--accent:#bdb3ff;--marker:#514087;--button-bg:#bdb3ff;--button-ink:#201936;--button-hover:#d2caff;--soft:#1b1a25;--surface:#1c1b27;--note-ink:#f5f3ff;--note-muted:#c0bbcf;--note-line:#534a68;--note-shadow:#292437;--illustration-bg:#29233b;--illustration-line:#62537d;--illustration-ink:#d6c6f1;--illustration-inner:#3c3053;color-scheme:dark}
 body{color:var(--ink);background:var(--paper)}.monogram>span,summary:hover{color:var(--brand)}a:focus-visible,summary:focus-visible{outline-color:var(--brand)}.brand-caption{border-color:var(--line)}.eyebrow>span,.separator,.focus-strip i{color:var(--muted)}.highlight:after{background:var(--marker)}.primary{background:var(--button-bg);color:var(--button-ink)}.primary:hover{background:var(--button-hover)}.field-note{color:var(--note-ink);box-shadow:0 15px 0 -5px var(--note-shadow)}.note-top,.note-bottom{border-color:var(--note-line);color:var(--note-muted)}.test-input{border-color:var(--note-line);color:var(--note-muted)}.note-result p{color:var(--note-muted)}.check{color:var(--dark)}.focus-strip,.about-section{background:var(--soft)}.project{background:var(--surface)}.registration-visual,.profile-visual,.regression-visual{background:var(--illustration-bg);color:var(--illustration-ink)}.flow i,.flow-active,.mini-table em,.suite-diagram span{color:var(--illustration-ink)}.mini-table>div,.suite-diagram>div,.suite-diagram>div>div{border-color:var(--illustration-line)}.suite-diagram>div>div{background:var(--illustration-inner)}.tags span{color:var(--muted)}.skills dl>div,.education{border-color:var(--line)}.skip-link{background:var(--button-bg);color:var(--button-ink)}
+
+/* Only explicit theme changes animate; a saved theme is applied before first paint. */
+@media screen and (prefers-reduced-motion:no-preference){
+  /* Capture complete palettes, without half-finished hover colour transitions. */
+  :root[data-theme-transition],:root[data-theme-transition] *,
+  :root[data-theme-transition] *::before,:root[data-theme-transition] *::after{transition:none!important}
+  :root[data-theme-transition]::view-transition-group(root){animation:none}
+  :root[data-theme-transition]::view-transition-old(root),
+  :root[data-theme-transition]::view-transition-new(root){animation:none;mix-blend-mode:normal}
+  :root[data-theme-transition]::view-transition-old(root){z-index:1}
+  :root[data-theme-transition]::view-transition-new(root){z-index:2;animation:theme-reveal 520ms cubic-bezier(.22,.61,.36,1) both}
+  @keyframes theme-reveal{
+    from{clip-path:circle(0 at var(--theme-origin-x) var(--theme-origin-y))}
+    to{clip-path:circle(var(--theme-reveal-radius) at var(--theme-origin-x) var(--theme-origin-y))}
+  }
+  /* Colour-only fallback leaves layout and the animated navigation indicators alone. */
+  :root[data-theme-fading],:root[data-theme-fading] *{
+    transition:background-color 450ms ease,color 450ms ease,border-color 450ms ease,outline-color 450ms ease,box-shadow 450ms ease,fill 450ms ease,stroke 450ms ease!important;
+  }
+  :root[data-theme-fading] .highlight::after{transition:background-color 450ms ease}
+}
