@@ -272,3 +272,15 @@
 .contact-grid>div>.availability-note{font-size:.875rem;margin-top:14px}
 @media(max-width:800px){.volunteer-grid{grid-template-columns:1fr}.volunteering{margin-top:28px;padding-top:24px}}
 @media(max-width:540px){.volunteer-card{padding:20px}.volunteer-grid{gap:14px}.volunteer-kind{margin-bottom:12px}.volunteer-card p{margin-top:12px}.work-preferences>div{gap:12px}}
+
+/* Give the desktop introduction its own screen, with a slightly raised composition.
+   The shared header offset includes 24px of anchor clearance. */
+@media screen and (min-width:801px){
+  .hero-personal{
+    min-height:calc(100vh - var(--site-header-offset,108px) + 24px);
+    min-height:calc(100svh - var(--site-header-offset,108px) + 24px);
+    /* Retain safe top padding; reduce the 48px lift on short screens. */
+    padding-bottom:calc(48px + clamp(0px,calc(100vh - 720px),96px));
+    padding-bottom:calc(48px + clamp(0px,calc(100svh - 720px),96px));
+  }
+}
